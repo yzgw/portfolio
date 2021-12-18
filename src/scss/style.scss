@@ -1,0 +1,302 @@
+@use "sass:math";
+
+:root {
+    --grid-size: 24px;
+}
+
+$palette-white-1: #fff;
+$palette-black-1: #1e1e1e;
+$palette-gray-1: #eeeeee;
+$palette-gray-2: #565656;
+$palette-gray-3: #626262;
+
+$one-grid: var(--grid-size);
+$half-grid: calc($one-grid / 2);
+$one-half-grid: calc($one-grid * 1.5);
+$two-grid: calc($one-grid * 2);
+$three-grid: calc($one-grid * 3);
+$four-grid: calc($one-grid * 4);
+
+$text-size: calc($one-grid * 3 / 5);
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Helvetica Neue",
+    Arial,
+    "Hiragino Kaku Gothic ProN",
+    "Hiragino Sans",
+    Meiryo,
+    sans-serif;
+    background-color: $palette-white-1;
+    background-size: $one-grid $one-grid;
+    background-position: $one-grid $one-grid;
+    background-image: repeating-linear-gradient(
+                    90deg,
+                    $palette-gray-1,
+                    $palette-gray-1 1px,
+                    transparent 1px,
+                    transparent $one-grid
+    ),
+    repeating-linear-gradient(
+                    0deg,
+                    $palette-gray-1,
+                    $palette-gray-1 1px,
+                    transparent 1px,
+                    transparent $one-grid
+    );
+    margin: 0;
+    padding: $one-grid $one-half-grid;
+    line-height: $one-half-grid;
+    font-size: $text-size;
+    letter-spacing: 0.02em;
+}
+
+.pt-header-1, .pt-header-2, .pt-header-3, .pt-paragraph, .pt-list, .pt-works-image {
+    margin: 0 0 $one-grid 0;
+}
+
+.pt-header-1 {
+    display: flex;
+    flex-direction: column;
+    letter-spacing: 0.1em;
+    margin-bottom: $two-grid;
+}
+
+.pt-header-1, .pt-header-2 {
+    &[data-loaded="true"] {
+        @extend .fill-title;
+    }
+}
+
+.pt-header-3, .pt-paragraph, .pt-list {
+    &[data-loaded="true"] {
+        @extend .fill-text;
+    }
+}
+
+.pt-label {
+    &[data-loaded="true"] {
+        @extend .fill-background;
+    }
+}
+
+.fill-title {
+    color: transparent;
+    -webkit-text-stroke: 1px $palette-black-1;
+    text-stroke: 1px $palette-black-1;
+    background-clip: text;
+    background-image: linear-gradient(to left, $palette-black-1 0%, $palette-black-1 50%, transparent 50%, transparent 100%);
+    background-size: 200%;
+    animation: gradient 1s cubic-bezier(0.85, 0, 0.15, 1) 0.2s;
+    animation-fill-mode: forwards;
+}
+
+.fill-text {
+    color: transparent;
+    background-clip: text;
+    background-image: linear-gradient(to left, $palette-black-1 0%, $palette-black-1 50%, transparent 50%, transparent 100%);
+    background-size: 200%;
+    animation: gradient 1s cubic-bezier(0.85, 0, 0.15, 1) 0.3s;
+    animation-fill-mode: forwards;
+}
+
+.fill-background {
+    background-image: linear-gradient(to left, $palette-gray-3 0%, $palette-gray-3 50%, transparent 50%, transparent 100%);
+    background-size: 200%;
+    animation: gradient 0.3s cubic-bezier(0.85, 0, 0.15, 1) 0.6s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes gradient {
+    0% {
+        background-position-x: 0;
+    }
+    100% {
+        background-position-x: -100%;
+    }
+}
+
+.pt-header-position {
+    line-height: $one-grid;
+    font-size: $one-grid;
+}
+
+.pt-header-name {
+    line-height: calc($three-grid);
+    font-size: clamp($one-grid, 15vw, $three-grid)
+}
+
+.pt-header-2 {
+    line-height: $two-grid;
+    font-size: $two-grid;
+    letter-spacing: 0.05em;
+}
+
+.pt-header-3 {
+    line-height: $two-grid;
+    font-size: $one-grid;
+    letter-spacing: 0.05em;
+}
+
+.pt-paragraph {
+    max-width: min(100vw, calc($one-grid * 30));
+    letter-spacing: 0.02em;
+}
+
+.pt-list {
+    padding: 0;
+
+    li {
+        list-style-type: none;
+        margin-bottom: $half-grid;
+    }
+}
+
+.pt-works-image {
+    height: calc($one-grid * 10);
+    //background-color: $palette-black-1;
+    object-fit: contain;
+    border-radius: 5px;
+
+    img {
+        width: 100%;
+        height: 100%;
+        max-height: 100%;
+        object-fit: cover;
+        object-position: top;
+        border: 1px solid $palette-gray-3;
+        border-radius: 5px;
+        opacity: 0;
+        animation: fade 0.5s linear 1s;
+        animation-fill-mode: forwards;
+        filter: grayscale(100%);
+    }
+}
+
+@keyframes fade {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+.pt-fab-locator {
+    position: fixed;
+    top: $one-grid;
+    right: $one-grid;
+}
+
+.pt-fab-button {
+    margin: 0;
+    border: none;
+    color: $palette-white-1;
+    background-color: $palette-black-1;
+    height: $two-grid;
+    width: $two-grid;
+    border-radius: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    outline-offset: 3px;
+
+    &:hover {
+        cursor: pointer;
+        background-color: $palette-gray-2;
+    }
+
+    @at-root a#{&} {
+        color: $palette-white-1;
+    }
+}
+
+.pt-popup {
+    border-radius: 5px;
+    border: 1px solid $palette-gray-3;
+    background-color: $palette-black-1;
+    color: $palette-white-1;
+}
+
+.pt-popup-locator {
+    position: absolute;
+    right: 0;
+    top: calc(100% + $half-grid);
+
+    &[aria-hidden="true"] {
+        display: none;
+    }
+}
+
+.pt-badge {
+    //background-color: $palette-black-1;
+    color: $palette-white-1;
+    height: $one-grid;
+    padding: 0 $half-grid;
+    border-radius: 1px;
+
+    + .pt-badge {
+        margin-left: $half-grid;
+    }
+}
+
+.pt-popup-menu {
+    padding: 0;
+    margin: 0;
+
+    li {
+        list-style-type: none;
+        white-space: nowrap;
+
+        > * {
+            width: 100%;
+            height: 100%;
+            display: inline-flex;
+            padding: $half-grid;
+            color: $palette-white-1;
+            text-decoration: none;
+        }
+
+        &:not(:last-child) {
+            border-bottom: 1px solid $palette-gray-3;
+        }
+
+        &:hover {
+            background-color: $palette-gray-2;
+        }
+    }
+}
+
+.pt-tooltip {
+    position: relative;
+
+    &:not([aria-pressed="true"]):hover {
+        &:before {
+            position: absolute;
+            content: attr(aria-label);
+            white-space: nowrap;
+            background-color: $palette-black-1;
+            color: $palette-white-1;
+            padding: 0 $half-grid;
+            height: $one-grid;
+            border-radius: 2px;
+            display: inline-flex;
+            align-items: center;
+        }
+    }
+
+    &[data-tooltip-position="left"]:before {
+        top: 50%;
+        left: 0;
+        transform: translate(calc(-100% - $half-grid), -50%);
+    }
+
+    &[data-tooltip-position="bottom"]:before {
+        bottom: calc($half-grid * -1);
+        left: 50%;
+        transform: translate(-50%, 100%);
+    }
+}
