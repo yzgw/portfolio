@@ -13,37 +13,37 @@ $four-grid: calc($one-grid * 4);
 
 $text-size: calc($one-grid * 3 / 5);
 
-$palette-black-1: #1e1e1e;
-$palette-gray-a: lighten($palette-black-1, 10);
-$palette-gray-1: lighten($palette-black-1, 20);
-$palette-gray-2: lighten($palette-black-1, 60);
-$palette-gray-3: lighten($palette-black-1, 80);
 $palette-white-1: #fff;
+$palette-black-1: #1e1e1e;
+
+$palette-gray-1: lighten($palette-black-1, 10);
+$palette-gray-2: lighten($palette-black-1, 20);
+$palette-gray-3: lighten($palette-black-1, 60);
+$palette-gray-4: lighten($palette-black-1, 80);
 
 $palette-blue: #2a5b99;
 $palette-blue-1: lighten($palette-blue, 10);
-$palette-blue-2: lighten($palette-blue, 25);
 $palette-blue-3: lighten($palette-blue, 30);
 $palette-blue-4: lighten($palette-blue, 45);
 
 @mixin light-theme() {
     --color-background: #{$palette-white-1};
-    --color-background-hover: #{$palette-gray-1};
-    --color-background-badge: #{$palette-gray-1};
+    --color-background-hover: #{$palette-gray-2};
+    --color-background-badge: #{$palette-gray-2};
     --color-background-invert: #{$palette-black-1};
     --color-text: #{$palette-black-1};
     --color-text-invert: #{$palette-white-1};
-    --color-grid: #{$palette-gray-3};
+    --color-grid: #{$palette-gray-4};
 }
 
 @mixin dark-theme() {
     --color-background: #{$palette-black-1};
-    --color-background-hover: #{$palette-gray-2};
-    --color-background-badge: #{$palette-gray-1};
+    --color-background-hover: #{$palette-gray-3};
+    --color-background-badge: #{$palette-gray-2};
     --color-background-invert: #{$palette-white-1};
     --color-text: #{$palette-white-1};
     --color-text-invert: #{$palette-black-1};
-    --color-grid: #{$palette-gray-a};
+    --color-grid: #{$palette-gray-1};
 }
 
 @mixin blue-print-theme() {
@@ -54,6 +54,39 @@ $palette-blue-4: lighten($palette-blue, 45);
     --color-text: #{$palette-white-1};
     --color-text-invert: #{$palette-blue};
     --color-grid: #{$palette-blue-1};
+}
+
+:root {
+    --custom-color-primary: #fff;
+    --custom-color-secondary-hs: 207, 15%;
+    --custom-color-secondary-l: 28%;
+    --custom-color-secondary: hsl(var(--custom-color-secondary-hs), var(--custom-color-secondary-l));
+    --custom-color-secondary-light-1: hsl(var(--custom-color-secondary-hs), calc(var(--custom-color-secondary-l) - 10%));
+    --custom-color-secondary-light-2: hsl(var(--custom-color-secondary-hs), calc(var(--custom-color-secondary-l) - 25%));
+    --custom-color-secondary-light-3: hsl(var(--custom-color-secondary-hs), calc(var(--custom-color-secondary-l) - 40%));
+    --custom-color-secondary-dark-1: hsl(var(--custom-color-secondary-hs), calc(var(--custom-color-secondary-l) + 10%));
+    --custom-color-secondary-dark-2: hsl(var(--custom-color-secondary-hs), calc(var(--custom-color-secondary-l) + 25%));
+    --custom-color-secondary-dark-3: hsl(var(--custom-color-secondary-hs), calc(var(--custom-color-secondary-l) + 40%));
+}
+
+@mixin custom-theme-light() {
+    --color-background: var(--custom-color-secondary);
+    --color-background-hover: var(--custom-color-secondary-light-3);
+    --color-background-badge: var(--custom-color-secondary-light-2);
+    --color-background-invert: var(--custom-color-primary);
+    --color-text: var(--custom-color-primary);
+    --color-text-invert: var(--custom-color-secondary);
+    --color-grid: var(--custom-color-secondary-light-1);
+}
+
+@mixin custom-theme-dark() {
+    --color-background: var(--custom-color-secondary);
+    --color-background-hover: var(--custom-color-secondary-dark-3);
+    --color-background-badge: var(--custom-color-secondary-dark-2);
+    --color-background-invert: var(--custom-color-primary);
+    --color-text: var(--custom-color-primary);
+    --color-text-invert: var(--custom-color-secondary);
+    --color-grid: var(--custom-color-secondary-dark-1);
 }
 
 $color-background: var(--color-background);
@@ -73,6 +106,13 @@ html {
 
     &[data-theme="blue-print"] {
         @include blue-print-theme();
+    }
+
+    &[data-theme="custom"], &[data-theme="custom"][data-custom-type="light"] {
+        @include custom-theme-light();
+    }
+    &[data-theme="custom"][data-custom-type="dark"] {
+        @include custom-theme-dark();
     }
 }
 
@@ -453,14 +493,6 @@ body {
     }
 }
 
-.pt-color-setting {
-    border-left: 1px solid $color-grid;
-    padding: $half-grid;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-}
-
 .pt-popup-menu {
     padding: 0;
     margin: 0;
@@ -470,7 +502,7 @@ body {
         list-style-type: none;
         white-space: nowrap;
 
-        > * {
+        > a {
             width: 100%;
             height: 100%;
             display: inline-flex;
@@ -479,7 +511,7 @@ body {
             text-decoration: none;
         }
 
-        &[aria-selected="true"] > *:before {
+        &[aria-selected="true"] > a:before {
             content: "•";
             width: $one-grid;
             height: $one-half-grid;
@@ -498,11 +530,11 @@ body {
         }
 
         &:first-child {
-            border-radius: 5px 0 0 0;
+            border-radius: 5px 0 5px 0;
         }
 
         &:last-child {
-            border-radius: 0 0 0 5px;
+            border-radius: 0 0 5px 5px;
         }
     }
 }
@@ -600,19 +632,26 @@ body {
 }
 
 .pt-color-setting {
+    padding: 0 $one-grid $one-grid $one-grid;
+}
+
+.pt-color-pickers {
+    border: 1px solid $color-grid;
     display: flex;
-    flex-direction: column;
+    border-radius: 2px;
 }
 
 .pt-color-picker {
-    border: 1px solid $color-text;
     background: none;
-    height: 50%;
+    border: none;
+    flex: 1;
+    width: $one-grid;
+    height: $one-half-grid;
 }
 
 @media screen and (max-width: 768px) {
     body {
-        padding: $one-grid $one-grid;
+        padding: $one-grid;
     }
 
     .pt-gallery {

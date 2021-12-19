@@ -72,7 +72,7 @@ class ThemeList {
     this.init();
   }
 
-  init() {
+  private init() {
     const currentTheme = new ThemeUtil().getTheme();
     const listItems = Array.from(this.list.querySelectorAll("li"));
 
@@ -92,7 +92,7 @@ class ThemeList {
   }
 }
 
-type Theme = "auto" | "light" | "dark" | "blue-print";
+type Theme = "auto" | "light" | "dark" | "blue-print" | "custom";
 
 class ThemeUtil {
 
@@ -106,12 +106,96 @@ class ThemeUtil {
   }
 }
 
+class CustomTheme {
+
+  constructor(private primaryPicker: HTMLInputElement, private secondaryPicker: HTMLInputElement) {
+  }
+
+  setPrimaryColor(value: string) {
+    localStorage.setItem("custom-primary-color", value);
+  }
+
+  getPrimaryColor() {
+    return localStorage.getItem("custom-primary-color");
+  }
+
+  setSecondaryColor(value: string) {
+    localStorage.setItem("custom-secondary-color", value);
+  }
+
+  getSecondaryColor() {
+    return localStorage.getItem("custom-secondary-color");
+  }
+
+  sync() {
+    const primaryColor = this.getPrimaryColor() || "#000000";
+    const secondaryColor = this.getSecondaryColor() || "#ffffff";
+    this.primaryPicker.value = primaryColor;
+    this.secondaryPicker.value = secondaryColor;
+
+    const secondaryColorRgb = this.hexToRgb(secondaryColor);
+    document.documentElement.style.setProperty("--custom-color-primary", primaryColor);
+
+    const secondaryColorHsl =
+      secondaryColorRgb ? this.rgbToHsl(secondaryColorRgb.r, secondaryColorRgb.g, secondaryColorRgb.b) : null;
+    if (secondaryColorHsl) {
+      document.documentElement.dataset.customType = secondaryColorHsl.l > 0.5 ? "light" : "dark";
+      document.documentElement.style.setProperty("--custom-color-secondary-hs", `${Math.floor(secondaryColorHsl.h * 360)}, ${Math.floor(secondaryColorHsl.s * 100)}%`);
+      document.documentElement.style.setProperty("--custom-color-secondary-l", `${Math.floor(secondaryColorHsl.l * 100)}%`);
+    }
+  }
+
+  private hexToRgb(hex) {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
+    } : null;
+  }
+
+  private rgbToHsl(r, g, b) {
+    const red = r /255, green = g / 255, blue = b / 255;
+    const max = Math.max(red, green, blue), min = Math.min(red, green, blue);
+    let h, s, l = (max + min) / 2;
+    if (max == min) {
+      h = s = 0;
+    } else {
+      const d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      switch (max) {
+        case red: h = (green - blue) / d + (green < blue ? 6 : 0); break;
+        case green: h = (blue - red) / d + 2; break;
+        case blue: h = (red - green) / d + 4; break;
+      }
+      h /= 6;
+    }
+    return { h, s, l };
+  }
+}
+
 window.addEventListener("DOMContentLoaded", ()=> {
   const themeUtil = new ThemeUtil();
   themeUtil.setTheme(themeUtil.getTheme());
 
   const themeList = document.querySelector("#theme .pt-popup-menu")
   new ThemeList(themeList);
+
+  const primaryColorPicker = document.getElementById("primary") as HTMLInputElement|null;
+  const secondaryColorPicker = document.getElementById("secondary") as HTMLInputElement|null;
+
+  if (primaryColorPicker && secondaryColorPicker) {
+    const customTheme = new CustomTheme(primaryColorPicker, secondaryColorPicker);
+    customTheme.sync();
+    primaryColorPicker.addEventListener("change", () => {
+      customTheme.setPrimaryColor(primaryColorPicker.value);
+      customTheme.sync();
+    });
+    secondaryColorPicker.addEventListener("change", () => {
+      customTheme.setSecondaryColor(secondaryColorPicker.value);
+      customTheme.sync();
+    });
+  }
 
   const button = document.querySelector("#theme-button");
   new Popup(button);
