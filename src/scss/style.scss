@@ -1,5 +1,8 @@
 @use "sass:math";
 
+/**
+ * レイアウト変数
+ */
 :root {
   --grid-size: 24px;
 }
@@ -13,6 +16,9 @@ $four-grid: calc($one-grid * 4);
 
 $text-size: calc($one-grid * 3 / 5);
 
+/**
+ * 色変数
+ */
 $palette-white-1: #fff;
 $palette-black-1: #1e1e1e;
 
@@ -139,13 +145,16 @@ $color-text-invert: var(--color-text-invert);
 $color-grid: var(--color-grid);
 
 html {
+  color-scheme: light;
   @include light-theme();
 
   &[data-theme="dark"] {
+    color-scheme: dark;
     @include dark-theme();
   }
 
   &[data-theme="blue-print"] {
+    color-scheme: dark;
     @include blue-print-theme();
   }
 
@@ -168,6 +177,9 @@ html[data-theme="auto"] {
   }
 }
 
+/**
+ * レイアウト
+ */
 * {
   box-sizing: border-box;
 }
@@ -243,83 +255,6 @@ body {
   margin-bottom: $two-grid;
 }
 
-.pt-header-1,
-.pt-header-2 {
-  &[data-loaded="true"] {
-    @extend .fill-title;
-  }
-}
-
-.pt-header-3,
-.pt-paragraph,
-.pt-list,
-.pt-flying-card,
-.pt-work-year {
-  &[data-loaded="true"] {
-    @extend .fill-text;
-  }
-}
-
-.pt-badge {
-  &[data-loaded="true"] {
-    @extend .fill-background;
-  }
-}
-
-.fill-title {
-  color: transparent;
-  -webkit-text-stroke: 1px $color-text;
-  text-stroke: 1px $color-text;
-  background-clip: text;
-  background-image: linear-gradient(
-    to left,
-    $color-text 0%,
-    $color-text 50%,
-    transparent 50%,
-    transparent 100%
-  );
-  background-size: 200%;
-  animation: gradient 1s cubic-bezier(0.85, 0, 0.15, 1) 0.3s;
-  animation-fill-mode: forwards;
-}
-
-.fill-text {
-  color: transparent;
-  background-clip: text;
-  background-image: linear-gradient(
-    to left,
-    $color-text 0%,
-    $color-text 50%,
-    transparent 50%,
-    transparent 100%
-  );
-  background-size: 200%;
-  animation: gradient 1s cubic-bezier(0.85, 0, 0.15, 1) 0.3s;
-  animation-fill-mode: forwards;
-}
-
-.fill-background {
-  background-image: linear-gradient(
-    to left,
-    $color-background-badge 0%,
-    $color-background-badge 50%,
-    transparent 50%,
-    transparent 100%
-  );
-  background-size: 200%;
-  animation: gradient 0.3s cubic-bezier(0.85, 0, 0.15, 1) 0.6s;
-  animation-fill-mode: forwards;
-}
-
-@keyframes gradient {
-  0% {
-    background-position-x: 0;
-  }
-  100% {
-    background-position-x: -100%;
-  }
-}
-
 .pt-header-position {
   line-height: $one-grid;
   font-size: $one-grid;
@@ -377,6 +312,9 @@ body {
   }
 }
 
+/**
+ * Worksの画像
+ */
 .pt-works-image {
   height: calc($one-grid * 10);
   //background-color: $color-text;
@@ -474,12 +412,9 @@ body {
   }
 }
 
-.pt-contact-button-locator {
-  position: fixed;
-  bottom: $one-grid;
-  right: $one-grid;
-}
-
+/**
+ * ボタン
+ */
 .pt-button {
   margin: 0;
   border: none;
@@ -517,7 +452,15 @@ body {
     color: $color-text-invert;
   }
 }
+.pt-contact-button-locator {
+  position: fixed;
+  bottom: $one-grid;
+  right: $one-grid;
+}
 
+/**
+ * FABボタン
+ */
 .pt-fab-locator {
   position: fixed;
   top: $one-grid;
@@ -552,15 +495,9 @@ body {
   }
 }
 
-.pt-badge {
-  //background-color: $color-text;
-  color: $color-text-invert;
-  height: $one-grid;
-  padding: 0 $half-grid;
-  border-radius: 1px;
-  margin-right: $half-grid;
-}
-
+/**
+ * ポップアップ
+ */
 .pt-configure-popup {
   display: flex;
 }
@@ -627,6 +564,9 @@ body {
   }
 }
 
+/**
+ * ツールチップ
+ */
 .pt-tooltip {
   position: relative;
 
@@ -658,21 +598,9 @@ body {
   }
 }
 
-.pt-modal-locator {
-  &[aria-hidden="true"] {
-    display: none;
-  }
-}
-
-.pt-modal-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.4);
-  width: 100%;
-  height: 100%;
-}
-
+/**
+ * モーダル
+ */
 .pt-modal {
   position: fixed;
   display: flex;
@@ -700,6 +628,24 @@ body {
   text-align: right;
 }
 
+.pt-modal-locator {
+  &[aria-hidden="true"] {
+    display: none;
+  }
+}
+
+.pt-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  width: 100%;
+  height: 100%;
+}
+
+/**
+ * ギャラリー
+ */
 .pt-gallery {
   position: relative;
   padding: $half-grid;
@@ -719,6 +665,9 @@ body {
   }
 }
 
+/**
+ * カスタム色の設定
+ */
 .pt-color-setting-note {
   display: block;
   line-height: $half-grid;
@@ -743,6 +692,101 @@ body {
   height: $one-half-grid;
 }
 
+/**
+ * テキストのアニメーション
+ */
+.pt-header-1,
+.pt-header-2 {
+  &[data-loaded="true"] {
+    @extend .fill-title;
+  }
+}
+
+.pt-header-3,
+.pt-paragraph,
+.pt-list,
+.pt-flying-card,
+.pt-work-year {
+  &[data-loaded="true"] {
+    @extend .fill-text;
+  }
+}
+
+.pt-badge {
+  &[data-loaded="true"] {
+    @extend .fill-background;
+  }
+}
+
+.fill-title {
+  color: transparent;
+  -webkit-text-stroke: 1px $color-text;
+  text-stroke: 1px $color-text;
+  background-clip: text;
+  background-image: linear-gradient(
+                  to left,
+                  $color-text 0%,
+                  $color-text 50%,
+                  transparent 50%,
+                  transparent 100%
+  );
+  background-size: 200%;
+  animation: gradient 1s cubic-bezier(0.85, 0, 0.15, 1) 0.3s;
+  animation-fill-mode: forwards;
+}
+
+.fill-text {
+  color: transparent;
+  background-clip: text;
+  background-image: linear-gradient(
+                  to left,
+                  $color-text 0%,
+                  $color-text 50%,
+                  transparent 50%,
+                  transparent 100%
+  );
+  background-size: 200%;
+  animation: gradient 1s cubic-bezier(0.85, 0, 0.15, 1) 0.3s;
+  animation-fill-mode: forwards;
+}
+
+.fill-background {
+  background-image: linear-gradient(
+                  to left,
+                  $color-background-badge 0%,
+                  $color-background-badge 50%,
+                  transparent 50%,
+                  transparent 100%
+  );
+  background-size: 200%;
+  animation: gradient 0.3s cubic-bezier(0.85, 0, 0.15, 1) 0.6s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes gradient {
+  0% {
+    background-position-x: 0;
+  }
+  100% {
+    background-position-x: -100%;
+  }
+}
+
+/**
+ * バッジ
+ */
+.pt-badge {
+  //background-color: $color-text;
+  color: $color-text-invert;
+  height: $one-grid;
+  padding: 0 $half-grid;
+  border-radius: 1px;
+  margin-right: $half-grid;
+}
+
+/**
+ * レスポンシブ
+ */
 @media screen and (max-width: 768px) {
   body {
     padding: $one-grid;
@@ -751,6 +795,18 @@ body {
   .pt-page {
     // これがないとSafariでウィンドウを大->小にした時に右カラムが大きいまま
     grid-template-columns: minmax(calc($one-grid * 12), calc($one-grid * 32)) 0;
+  }
+
+  .pt-page-secondary {
+    &:before {
+      position: fixed;
+      top: $four-grid;
+      content: "";
+      border-left: 1px dashed $color-text;
+      height: calc(100% - calc($four-grid * 2));
+      width: 0;
+      transform: translateX(calc($one-grid * -1));
+    }
   }
 
   .pt-gallery {

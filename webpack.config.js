@@ -54,6 +54,10 @@ module.exports = (env, argv) => {
                     {
                         from: path.join(__dirname, "./src/image"),
                         to: path.join(__dirname, "./dist/image")
+                    },
+                    {
+                        from: path.join(__dirname, "./src/favicon.png"),
+                        to: path.join(__dirname, "./dist/favicon.png")
                     }
                 ]
             }),
