@@ -1,5 +1,5 @@
 import "../scss/style.scss";
-import * as lozad from 'lozad';
+import * as lozad from "lozad";
 
 class Popup {
   constructor(private button) {
@@ -31,9 +31,9 @@ class Popup {
       return;
     }
     if (target && !target.contains(event.target)) {
-       this.close();
+      this.close();
     }
-  }
+  };
 
   open() {
     const target = this.getTarget();
@@ -44,7 +44,7 @@ class Popup {
       const hideButtons = target.querySelectorAll("[data-dismiss]");
       hideButtons.forEach((button: HTMLElement) => {
         button.onclick = () => {
-          this.close()
+          this.close();
         };
       });
     }
@@ -67,7 +67,6 @@ class Popup {
 }
 
 class ThemeList {
-
   constructor(private list) {
     this.init();
   }
@@ -87,7 +86,7 @@ class ThemeList {
         });
         new ThemeUtil().setTheme(item.dataset.value as Theme);
         item.setAttribute("aria-selected", "true");
-      })
+      });
     });
   }
 }
@@ -95,21 +94,21 @@ class ThemeList {
 type Theme = "auto" | "light" | "dark" | "blue-print" | "custom";
 
 class ThemeUtil {
-
   setTheme(theme: Theme) {
     localStorage.setItem("theme", theme);
     document.documentElement.dataset.theme = theme;
   }
 
   getTheme(): Theme {
-    return localStorage.getItem("theme") as Theme || "blue-print";
+    return (localStorage.getItem("theme") as Theme) || "blue-print";
   }
 }
 
 class CustomTheme {
-
-  constructor(private primaryPicker: HTMLInputElement, private secondaryPicker: HTMLInputElement) {
-  }
+  constructor(
+    private primaryPicker: HTMLInputElement,
+    private secondaryPicker: HTMLInputElement
+  ) {}
 
   setPrimaryColor(value: string) {
     localStorage.setItem("custom-primary-color", value);
@@ -134,46 +133,83 @@ class CustomTheme {
     this.secondaryPicker.value = secondaryColor;
 
     const primaryColorRgb = this.hexToRgb(primaryColor);
-    const primaryColorHsl =
-      primaryColorRgb ? this.rgbToHsl(primaryColorRgb.r, primaryColorRgb.g, primaryColorRgb.b) : null;
+    const primaryColorHsl = primaryColorRgb
+      ? this.rgbToHsl(primaryColorRgb.r, primaryColorRgb.g, primaryColorRgb.b)
+      : null;
     if (primaryColorHsl) {
-      document.documentElement.dataset.primaryType = primaryColorHsl.l > 0.5 ? "light" : "dark";
-      document.documentElement.style.setProperty("--custom-color-primary-h", `${Math.floor(primaryColorHsl.h * 360)}`);
-      document.documentElement.style.setProperty("--custom-color-primary-s", `${Math.floor(primaryColorHsl.s * 100)}%`);
-      document.documentElement.style.setProperty("--custom-color-primary-l", `${Math.floor(primaryColorHsl.l * 100)}%`);
+      document.documentElement.dataset.primaryType =
+        primaryColorHsl.l > 0.5 ? "light" : "dark";
+      document.documentElement.style.setProperty(
+        "--custom-color-primary-h",
+        `${Math.floor(primaryColorHsl.h * 360)}`
+      );
+      document.documentElement.style.setProperty(
+        "--custom-color-primary-s",
+        `${Math.floor(primaryColorHsl.s * 100)}%`
+      );
+      document.documentElement.style.setProperty(
+        "--custom-color-primary-l",
+        `${Math.floor(primaryColorHsl.l * 100)}%`
+      );
     }
 
     const secondaryColorRgb = this.hexToRgb(secondaryColor);
-    const secondaryColorHsl =
-      secondaryColorRgb ? this.rgbToHsl(secondaryColorRgb.r, secondaryColorRgb.g, secondaryColorRgb.b) : null;
+    const secondaryColorHsl = secondaryColorRgb
+      ? this.rgbToHsl(
+          secondaryColorRgb.r,
+          secondaryColorRgb.g,
+          secondaryColorRgb.b
+        )
+      : null;
     if (secondaryColorHsl) {
-      document.documentElement.style.setProperty("--custom-color-secondary-hs", `${Math.floor(secondaryColorHsl.h * 360)}, ${Math.floor(secondaryColorHsl.s * 100)}%`);
-      document.documentElement.style.setProperty("--custom-color-secondary-l", `${Math.floor(secondaryColorHsl.l * 100)}%`);
+      document.documentElement.style.setProperty(
+        "--custom-color-secondary-hs",
+        `${Math.floor(secondaryColorHsl.h * 360)}, ${Math.floor(
+          secondaryColorHsl.s * 100
+        )}%`
+      );
+      document.documentElement.style.setProperty(
+        "--custom-color-secondary-l",
+        `${Math.floor(secondaryColorHsl.l * 100)}%`
+      );
     }
   }
 
   private hexToRgb(hex) {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-      r: parseInt(result[1], 16),
-      g: parseInt(result[2], 16),
-      b: parseInt(result[3], 16)
-    } : null;
+    return result
+      ? {
+          r: parseInt(result[1], 16),
+          g: parseInt(result[2], 16),
+          b: parseInt(result[3], 16),
+        }
+      : null;
   }
 
   private rgbToHsl(r, g, b) {
-    const red = r /255, green = g / 255, blue = b / 255;
-    const max = Math.max(red, green, blue), min = Math.min(red, green, blue);
-    let h, s, l = (max + min) / 2;
+    const red = r / 255,
+      green = g / 255,
+      blue = b / 255;
+    const max = Math.max(red, green, blue),
+      min = Math.min(red, green, blue);
+    let h,
+      s,
+      l = (max + min) / 2;
     if (max == min) {
       h = s = 0;
     } else {
       const d = max - min;
       s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
       switch (max) {
-        case red: h = (green - blue) / d + (green < blue ? 6 : 0); break;
-        case green: h = (blue - red) / d + 2; break;
-        case blue: h = (red - green) / d + 4; break;
+        case red:
+          h = (green - blue) / d + (green < blue ? 6 : 0);
+          break;
+        case green:
+          h = (blue - red) / d + 2;
+          break;
+        case blue:
+          h = (red - green) / d + 4;
+          break;
       }
       h /= 6;
     }
@@ -181,18 +217,25 @@ class CustomTheme {
   }
 }
 
-window.addEventListener("DOMContentLoaded", ()=> {
+window.addEventListener("DOMContentLoaded", () => {
   const themeUtil = new ThemeUtil();
   themeUtil.setTheme(themeUtil.getTheme());
 
-  const themeList = document.querySelector("#theme .pt-popup-menu")
+  const themeList = document.querySelector("#theme .pt-popup-menu");
   new ThemeList(themeList);
 
-  const primaryColorPicker = document.getElementById("primary") as HTMLInputElement|null;
-  const secondaryColorPicker = document.getElementById("secondary") as HTMLInputElement|null;
+  const primaryColorPicker = document.getElementById(
+    "primary"
+  ) as HTMLInputElement | null;
+  const secondaryColorPicker = document.getElementById(
+    "secondary"
+  ) as HTMLInputElement | null;
 
   if (primaryColorPicker && secondaryColorPicker) {
-    const customTheme = new CustomTheme(primaryColorPicker, secondaryColorPicker);
+    const customTheme = new CustomTheme(
+      primaryColorPicker,
+      secondaryColorPicker
+    );
     customTheme.sync();
     primaryColorPicker.addEventListener("change", () => {
       customTheme.setPrimaryColor(primaryColorPicker.value);
@@ -209,9 +252,9 @@ window.addEventListener("DOMContentLoaded", ()=> {
   const contactButton = document.querySelector("#contact-button");
   new Popup(contactButton);
 
-  const el = document.querySelectorAll(".pt-header-1, .pt-header-2, .pt-header-3, .pt-paragraph, .pt-list, .pt-badge, .pt-flying-card, .pt-work-year");
+  const el = document.querySelectorAll(
+    ".pt-header-1, .pt-header-2, .pt-header-3, .pt-paragraph, .pt-list, .pt-badge, .pt-flying-card, .pt-work-year"
+  );
   const observer = lozad(el);
   observer.observe();
 });
-
-
