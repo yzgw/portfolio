@@ -57,36 +57,42 @@ $palette-blue-4: lighten($palette-blue, 45);
 }
 
 :root {
-    --custom-color-primary: #fff;
-    --custom-color-secondary-hs: 207, 15%;
-    --custom-color-secondary-l: 28%;
+    --custom-color-primary-h: 0;
+    --custom-color-primary-s: 0%;
+    --custom-color-primary-l: 0%;
+    --custom-color-primary: hsl(var(--custom-color-primary-h), var(--custom-color-primary-s), var(--custom-color-primary-l));
+    --custom-color-primary-light-1: hsl(var(--custom-color-primary-h), var(--custom-color-primary-s), calc(var(--custom-color-primary-l) + 10%));
+    --custom-color-primary-light-2: hsl(var(--custom-color-primary-h), var(--custom-color-primary-s), calc(var(--custom-color-primary-l) + 5%));
+    --custom-color-primary-dark-1: hsl(var(--custom-color-primary-h), var(--custom-color-primary-s), calc(var(--custom-color-primary-l) - 10%));
+    --custom-color-primary-dark-2: hsl(var(--custom-color-primary-h), var(--custom-color-primary-s), calc(var(--custom-color-primary-l) - 5%));
+
+    --custom-color-secondary-hs: 0, 0%;
+    --custom-color-secondary-l: 100%;
     --custom-color-secondary: hsl(var(--custom-color-secondary-hs), var(--custom-color-secondary-l));
-    --custom-color-secondary-light-1: hsl(var(--custom-color-secondary-hs), calc(var(--custom-color-secondary-l) - 10%));
-    --custom-color-secondary-light-2: hsl(var(--custom-color-secondary-hs), calc(var(--custom-color-secondary-l) - 25%));
-    --custom-color-secondary-light-3: hsl(var(--custom-color-secondary-hs), calc(var(--custom-color-secondary-l) - 40%));
-    --custom-color-secondary-dark-1: hsl(var(--custom-color-secondary-hs), calc(var(--custom-color-secondary-l) + 10%));
-    --custom-color-secondary-dark-2: hsl(var(--custom-color-secondary-hs), calc(var(--custom-color-secondary-l) + 25%));
-    --custom-color-secondary-dark-3: hsl(var(--custom-color-secondary-hs), calc(var(--custom-color-secondary-l) + 40%));
+    --custom-color-secondary-light-1: hsl(var(--custom-color-secondary-hs), calc(var(--custom-color-secondary-l) + 10%));
+    --custom-color-secondary-light-2: hsl(var(--custom-color-secondary-hs), calc(var(--custom-color-secondary-l) + 5%));
+    --custom-color-secondary-dark-1: hsl(var(--custom-color-secondary-hs), calc(var(--custom-color-secondary-l) - 10%));
+    --custom-color-secondary-dark-2: hsl(var(--custom-color-secondary-hs), calc(var(--custom-color-secondary-l) - 5%));
 }
 
 @mixin custom-theme-light() {
     --color-background: var(--custom-color-secondary);
-    --color-background-hover: var(--custom-color-secondary-light-3);
-    --color-background-badge: var(--custom-color-secondary-light-2);
-    --color-background-invert: var(--custom-color-primary);
-    --color-text: var(--custom-color-primary);
-    --color-text-invert: var(--custom-color-secondary);
-    --color-grid: var(--custom-color-secondary-light-1);
-}
-
-@mixin custom-theme-dark() {
-    --color-background: var(--custom-color-secondary);
-    --color-background-hover: var(--custom-color-secondary-dark-3);
-    --color-background-badge: var(--custom-color-secondary-dark-2);
+    --color-background-hover: var(--custom-color-primary-dark-1);
+    --color-background-badge: var(--custom-color-primary-dark-2);
     --color-background-invert: var(--custom-color-primary);
     --color-text: var(--custom-color-primary);
     --color-text-invert: var(--custom-color-secondary);
     --color-grid: var(--custom-color-secondary-dark-1);
+}
+
+@mixin custom-theme-dark() {
+    --color-background: var(--custom-color-secondary);
+    --color-background-hover: var(--custom-color-primary-light-1);
+    --color-background-badge: var(--custom-color-primary-light-2);
+    --color-background-invert: var(--custom-color-primary);
+    --color-text: var(--custom-color-primary);
+    --color-text-invert: var(--custom-color-secondary);
+    --color-grid: var(--custom-color-secondary-light-1);
 }
 
 $color-background: var(--color-background);
@@ -108,10 +114,10 @@ html {
         @include blue-print-theme();
     }
 
-    &[data-theme="custom"], &[data-theme="custom"][data-custom-type="light"] {
+    &[data-theme="custom"], &[data-theme="custom"][data-primary-type="light"] {
         @include custom-theme-light();
     }
-    &[data-theme="custom"][data-custom-type="dark"] {
+    &[data-theme="custom"][data-primary-type="dark"] {
         @include custom-theme-dark();
     }
 }
@@ -195,7 +201,6 @@ body {
 }
 
 .pt-header-1 {
-    display: flex;
     flex-direction: column;
     letter-spacing: 0.1em;
     margin-bottom: $two-grid;
@@ -319,6 +324,18 @@ body {
     border-radius: 3px;
     position: relative;
 
+    &:after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.1;
+        background-color: $color-text;
+        border-radius: 3px;
+    }
+
     img {
         width: 100%;
         height: 100%;
@@ -330,7 +347,17 @@ body {
         opacity: 0;
         animation: fade 0.3s linear 0.7s;
         animation-fill-mode: forwards;
-        filter: grayscale(100%);
+        filter: grayscale(90%);
+    }
+
+    &:hover {
+        &:after {
+            display: none;
+        }
+
+        img {
+            filter: none;
+        }
     }
 }
 
@@ -530,7 +557,7 @@ body {
         }
 
         &:first-child {
-            border-radius: 5px 0 5px 0;
+            border-radius: 5px 5px 0 0;
         }
 
         &:last-child {
@@ -631,12 +658,18 @@ body {
     }
 }
 
+.pt-color-setting-note {
+    display: block;
+    line-height: $half-grid;
+    font-size: calc($half-grid / 2);
+    text-align: center;
+}
+
 .pt-color-setting {
     padding: 0 $one-grid $one-grid $one-grid;
 }
 
 .pt-color-pickers {
-    border: 1px solid $color-grid;
     display: flex;
     border-radius: 2px;
 }
@@ -652,6 +685,11 @@ body {
 @media screen and (max-width: 768px) {
     body {
         padding: $one-grid;
+    }
+
+    .pt-page {
+        // これがないとSafariでウィンドウを大->小にした時に右カラムが大きいまま
+        grid-template-columns: minmax(calc($one-grid * 12), calc($one-grid * 32)) 0;
     }
 
     .pt-gallery {

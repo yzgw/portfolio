@@ -128,18 +128,25 @@ class CustomTheme {
   }
 
   sync() {
-    const primaryColor = this.getPrimaryColor() || "#000000";
-    const secondaryColor = this.getSecondaryColor() || "#ffffff";
+    const primaryColor = this.getPrimaryColor() || "#c0c039";
+    const secondaryColor = this.getSecondaryColor() || "#765289";
     this.primaryPicker.value = primaryColor;
     this.secondaryPicker.value = secondaryColor;
 
-    const secondaryColorRgb = this.hexToRgb(secondaryColor);
-    document.documentElement.style.setProperty("--custom-color-primary", primaryColor);
+    const primaryColorRgb = this.hexToRgb(primaryColor);
+    const primaryColorHsl =
+      primaryColorRgb ? this.rgbToHsl(primaryColorRgb.r, primaryColorRgb.g, primaryColorRgb.b) : null;
+    if (primaryColorHsl) {
+      document.documentElement.dataset.primaryType = primaryColorHsl.l > 0.5 ? "light" : "dark";
+      document.documentElement.style.setProperty("--custom-color-primary-h", `${Math.floor(primaryColorHsl.h * 360)}`);
+      document.documentElement.style.setProperty("--custom-color-primary-s", `${Math.floor(primaryColorHsl.s * 100)}%`);
+      document.documentElement.style.setProperty("--custom-color-primary-l", `${Math.floor(primaryColorHsl.l * 100)}%`);
+    }
 
+    const secondaryColorRgb = this.hexToRgb(secondaryColor);
     const secondaryColorHsl =
       secondaryColorRgb ? this.rgbToHsl(secondaryColorRgb.r, secondaryColorRgb.g, secondaryColorRgb.b) : null;
     if (secondaryColorHsl) {
-      document.documentElement.dataset.customType = secondaryColorHsl.l > 0.5 ? "light" : "dark";
       document.documentElement.style.setProperty("--custom-color-secondary-hs", `${Math.floor(secondaryColorHsl.h * 360)}, ${Math.floor(secondaryColorHsl.s * 100)}%`);
       document.documentElement.style.setProperty("--custom-color-secondary-l", `${Math.floor(secondaryColorHsl.l * 100)}%`);
     }
