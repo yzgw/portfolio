@@ -180,6 +180,7 @@ html[data-theme="auto"] {
 /**
  * レイアウト
  */
+
 * {
   box-sizing: border-box;
 }
@@ -612,6 +613,11 @@ body {
   background-color: $color-background-invert;
   color: $color-text-invert;
   padding: $half-grid;
+
+  a {
+    font-weight: bold;
+    color: inherit;
+  }
 }
 
 .pt-modal-title {
@@ -748,6 +754,15 @@ body {
   background-size: 200%;
   animation: gradient 1s cubic-bezier(0.85, 0, 0.15, 1) 0.3s;
   animation-fill-mode: forwards;
+
+  a {
+    color: transparent;
+    font-weight: bold;
+
+    &:hover {
+      border-bottom: 1px solid $color-text;
+    }
+  }
 }
 
 .fill-background {
