@@ -263,7 +263,7 @@ body {
 
 .pt-header-name {
   line-height: calc($three-grid);
-  font-size: clamp($one-grid, 14vw, $three-grid);
+  font-size: clamp($one-grid, 13vw, $three-grid);
 }
 
 .pt-header-2 {
@@ -771,7 +771,7 @@ body {
   background-image: linear-gradient(
                   to left,
                   $color-background-badge 0%,
-                  $color-background-badge 50%,
+                  $color-background-badge 60%,
                   transparent 50%,
                   transparent 100%
   );
