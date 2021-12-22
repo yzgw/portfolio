@@ -321,8 +321,8 @@ body {
   object-fit: contain;
   border-radius: 3px;
   position: relative;
-  aspect-ratio: 3 / 1;
   max-width: 100%;
+  aspect-ratio: 3 / 1;
 
   &:after {
     content: "";
@@ -330,8 +330,9 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: auto;
     opacity: 0.1;
+    aspect-ratio: 3 / 1;
     background-color: $color-text;
     border-radius: 3px;
   }
@@ -339,7 +340,6 @@ body {
   img {
     width: 100%;
     height: 100%;
-    max-height: 100%;
     object-fit: cover;
     object-position: top;
     border: 1px solid $color-background-invert;
@@ -772,7 +772,7 @@ body {
   background-image: linear-gradient(
                   to left,
                   $color-background-badge 0%,
-                  $color-background-badge 60%,
+                  $color-background-badge 50%,
                   transparent 50%,
                   transparent 100%
   );
