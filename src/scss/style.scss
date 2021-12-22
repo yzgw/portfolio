@@ -317,11 +317,12 @@ body {
  * Worksの画像
  */
 .pt-works-image {
-  height: calc($one-grid * 10);
   //background-color: $color-text;
   object-fit: contain;
   border-radius: 3px;
   position: relative;
+  aspect-ratio: 3 / 1;
+  max-width: 100%;
 
   &:after {
     content: "";
@@ -677,7 +678,8 @@ body {
 .pt-color-setting-note {
   display: block;
   line-height: $half-grid;
-  font-size: calc($half-grid / 2);
+  font-size: calc($half-grid);
+  margin-bottom: $half-grid;
   text-align: center;
 }
 
@@ -822,6 +824,11 @@ body {
       width: 0;
       transform: translateX(calc($one-grid * -1));
     }
+  }
+
+  .pt-works-image {
+    aspect-ratio: 3 / 1;
+    max-width: 100%;
   }
 
   .pt-gallery {
